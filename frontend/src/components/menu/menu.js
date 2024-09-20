@@ -28,7 +28,8 @@ const MenuContainer = ({ className }) => {
                     setErrorMessage(menuRes.error);
                     return;
                 };
-                setMenuItems(menuRes.res[0].menu_items);
+                
+                setMenuItems(menuRes.res.data);
                 
             });
         

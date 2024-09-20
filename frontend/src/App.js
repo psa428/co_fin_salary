@@ -71,7 +71,9 @@ function App() {
           
           <Routes>
             <Route path='/' element={<Menu />} />
+            {/* <Route path='/' element={<div>Главная страница</div>} /> */}
             <Route path='/login' element={<Autorization />} />
+            <Route path='/register' element={<Registration />} />
             <Route path='/year' element={<InfYear />} />
             <Route path='/users' element={<Users />} />
             <Route path='/bid' element={<Bid />} />

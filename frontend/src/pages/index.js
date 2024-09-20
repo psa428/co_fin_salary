@@ -1,4 +1,5 @@
 export * from './autorization/autorization';
+export * from './registration/registration';
 export * from './inf-year/inf-year';
 export * from  './users/users';
 export * from './bid/bid';

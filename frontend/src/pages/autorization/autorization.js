@@ -2,8 +2,7 @@ import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import { server } from '../../bff/server';
-import { server } from '../../bff';
+
 import { useState } from 'react';
 import { AuthFormError, Input, Button } from '../../components';
 import { useResetForm } from '../../hooks';
@@ -12,7 +11,8 @@ import styled from 'styled-components';
 import { setUser } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserRole } from '../../selectors';
-import { ROLE } from '../../bff/operations/constants/role';
+// import { ROLE } from '../../bff/operations/constants/role';
+import { request } from '../../utils/request';
 
 const authFormSchema = yup.object().shape({
     login:  yup.string()
@@ -34,6 +34,7 @@ const StyledLink = styled(Link)`
     text-decoration:    underline;
     margin: 20px 0;
     font-size:  18px;
+    color:  #007889
 `;
 
 const AutorizationContainer = ({ className }) => {
@@ -62,15 +63,15 @@ const AutorizationContainer = ({ className }) => {
 
     const onSubmit = ({ login, password}) => {
         
-        server.authorize(login, password).then(({error, res}) => {
+        request('/login', 'POST', {login, password}).then(({error, user}) => {
             
             if (error) {  
                 setServerError(`Ошибка запроса: ${error}`);
                 return;
             }
 
-            dispatch(setUser(res));
-            sessionStorage.setItem('userData', JSON.stringify(res));
+            dispatch(setUser(user));
+            sessionStorage.setItem('userData', JSON.stringify(user));
         })
 
     };
@@ -78,7 +79,7 @@ const AutorizationContainer = ({ className }) => {
     const formError = errors.login?.message || errors?.password?.message ;
 
     const errorMessage = formError || serverError;
-
+    
     if (roleId) {
         return <Navigate to="/"></Navigate>
 
@@ -104,7 +105,7 @@ const AutorizationContainer = ({ className }) => {
                     Авторизоваться
                 </Button>
                 {errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
-                <StyledLink to="/register">Регистрация</StyledLink>
+                {roleId === 0 ? <StyledLink to="/register">Регистрация</StyledLink> : <></>}
                 
             </form>
 
