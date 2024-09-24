@@ -10,6 +10,7 @@ import { useLayoutEffect } from 'react';
 import { setUser } from './actions';
 import { selectUserName } from './selectors';
 import { Menu } from './components';
+import { YearInfEdit } from './pages/year-inf-edit/year-inf-edit';
 
 const AppColumn = styled.div`
   display:  flex;
@@ -74,7 +75,8 @@ function App() {
             {/* <Route path='/' element={<div>Главная страница</div>} /> */}
             <Route path='/login' element={<Autorization />} />
             <Route path='/register' element={<Registration />} />
-            <Route path='/year' element={<InfYear />} />
+            <Route path='/year_inf' element={<InfYear />} />
+              <Route path='/year_inf/edit' element={<YearInfEdit />} />
             <Route path='/users' element={<Users />} />
             <Route path='/bid' element={<Bid />} />
             <Route path='/staff' element={<Staff />} />

@@ -1,0 +1,1 @@
+export const selectKdateLpu = ({ user }) => user.kdateLpu;

@@ -34,7 +34,8 @@ router.post('/', authenticated, hasRole([ROLES.ADMIN, ROLES.HOSP]), async (req, 
     // Получение всей информации о состоянии на начало года
 router.get('/', async (req, res) => {
     const {yearInf, lastPage } = await getYearInfs(
-        req.query.search,
+        req.query.kdate_lpu,
+        req.query.kdlpu,
         req.query.limit,
         req.query.page
     )

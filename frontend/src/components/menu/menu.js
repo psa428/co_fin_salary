@@ -30,16 +30,13 @@ const MenuContainer = ({ className }) => {
                 };
                 
                 setMenuItems(menuRes.res.data);
-                
+               
             });
         
         }    
         else
             setMenuItems(null) ;
     }, [requestServer, roleId]);
-
-    
-
 
     return (
         <div className={className}>
@@ -53,13 +50,13 @@ const MenuContainer = ({ className }) => {
                 { 
                 menuItems.map((item, index) => 
                      
-                    <li className="menu-item" key={item.id}>
+                    <li className="menu-item" key={index}>
                         <Link to={`${item.path}`}>
                             {item.menu_item}
                         </Link>
                     </li>
                 
-                   
+                  
                 )}  
                 </ul>
 

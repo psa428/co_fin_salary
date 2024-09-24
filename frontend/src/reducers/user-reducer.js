@@ -22,9 +22,9 @@ export const userReducer = (state = initialUserState, action) => {
                 login: action.payload.login,
                 id: action.payload.id,
                 roleId: action.payload.roleId,
-                kdateLpu:  action.payload.kdateLPu,
-                kdlpu:  action.payload.kdlpu,
-                userName:  action.payload.userName,
+                kdateLpu:  action.payload.kdateLpu,
+                kdlpu:  action.payload.kdLpu,
+                userName:  action.payload.nameUser,
                 session:    action.payload.session
 
             }

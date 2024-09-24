@@ -25,16 +25,23 @@ function deleteYearInf(id) {
 };
 
 //  Получение перечня информации о состоянии на начало года (с пагинацией)
-async function getYearInfs(search , limit = 10, page = 1) {
+async function getYearInfs(kdate_lpu, kdlpu, limit = 10, page = 1) {
+    
+    
     const [yearInf, count] = await Promise.all([
         // 
-        YearInf.find({year_f: Number(search)})
+        YearInf.find({
+            kdate_lpu: Number(kdate_lpu),
+            kdlpu:  Number(kdlpu)})
         // YearInf.find()
         .limit(limit)
         .skip((page - 1) * limit)
         .sort({createdAt: -1}),
         // YearInf.countDocuments({year_f: {$regex: search}})
-        YearInf.countDocuments({year_f: search})
+        YearInf.countDocuments({
+                kdate_lpu: Number(kdate_lpu),
+                kdlpu:  Number(kdlpu)
+        })
         // YearInf.countDocuments()
     ])
     return {

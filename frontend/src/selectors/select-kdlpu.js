@@ -1,0 +1,1 @@
+export const selectKdLpu = ({ user }) => user.kdlpu;
