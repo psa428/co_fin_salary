@@ -69,7 +69,7 @@ const AutorizationContainer = ({ className }) => {
                 setServerError(`Ошибка запроса: ${error}`);
                 return;
             }
-
+            console.log('in AuthorizationContainer user= ', user)
             dispatch(setUser(user));
             sessionStorage.setItem('userData', JSON.stringify(user));
         })

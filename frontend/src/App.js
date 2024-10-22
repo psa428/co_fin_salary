@@ -76,7 +76,8 @@ function App() {
             <Route path='/login' element={<Autorization />} />
             <Route path='/register' element={<Registration />} />
             <Route path='/year_inf' element={<InfYear />} />
-              <Route path='/year_inf/edit' element={<YearInfEdit />} />
+              <Route path='/year_inf/:id' element={<YearInfEdit />} />
+              <Route path='/year_inf/:id/:kdate_lpu/:kdlpu' element={<YearInfEdit />} />
             <Route path='/users' element={<Users />} />
             <Route path='/bid' element={<Bid />} />
             <Route path='/staff' element={<Staff />} />

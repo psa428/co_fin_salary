@@ -36,7 +36,7 @@ const YearInfSchema = mongoose.Schema({
         default:    0
     },
     mh_accpt: {
-        type:   Date,
+        type:   String,
         default:    null
     }, 
     mh_stat: {
@@ -48,7 +48,7 @@ const YearInfSchema = mongoose.Schema({
         default:    false
     },
     date_set_ready: {
-        type:   Date,
+        type:   String,
         default:    null
     },
     month_start: {

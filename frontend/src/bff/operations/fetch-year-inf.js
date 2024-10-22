@@ -1,12 +1,13 @@
 import { getYearInf } from "../api";
-import { sessions } from "../sessions";
 
-export const fetchYearInf = async (kdateLpu, kdLpu) => {
+export const fetchYearInf = async (yearInfId) => {
    
-    const yearInf = await getYearInf( kdateLpu, kdLpu);
-    
+    const yearInf = await getYearInf(yearInfId);
+
     return {
         error:  null,
-        res:    yearInf,
+        res:    {
+            ...yearInf
+        }    
     };
 };

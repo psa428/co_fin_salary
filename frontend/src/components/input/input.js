@@ -17,5 +17,6 @@ export const Input = styled(InputContainer)`
     padding:    10px;
     font-size:  18px;
     border: 1px solid #007889;
+    
 
 `;

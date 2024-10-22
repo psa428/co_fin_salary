@@ -25,7 +25,8 @@ const YearInfRowContainer = ({ className, id, year_f, doctors, doctors_need, nur
                 <div className="nurses-need">{nurses_need}</div>
                 <div className="nss-rest">{nss_rest}</div>
                 <div className='edit-btn'>
-                    <Link to="/year_inf/edit">    <Icon
+                    
+                    <Link to={'/year_inf/' + id}>    <Icon
                             id="fa-pencil-square-o"  
                             margin="0 0 0 10px"   
                             disabled={false}

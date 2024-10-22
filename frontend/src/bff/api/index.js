@@ -8,4 +8,7 @@ export * from './get-post';
 export * from './add-comment';
 export * from './get-comments';
 export * from './get-menu';
-export * from './get-year-inf'
+export * from './get-year-infs';
+export * from './get-year-inf';
+export * from './set-year-inf';
+export * from './create-year-inf';
