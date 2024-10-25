@@ -4,12 +4,13 @@ import { selectUserSession } from "../selectors";
 import { server } from "../bff";
 
 export const useServerRequest = () => {
-    const session = useSelector(selectUserSession);    
+    const session = useSelector(selectUserSession);   
+     
     
     return useCallback((operation, ...params) => {
       
         const request = ['register', 'authorize', 'fetchMenu', 'fetchYearInfs', 'fetchYearInf', 
-            'updateYearInf', 'addYearInf'].includes(operation)
+            'updateYearInf', 'addYearInf', 'fetchMonthInfs', 'addMonthInf', 'fetchMonthInf'].includes(operation)
         ? params
         : [session, ...params];     
 

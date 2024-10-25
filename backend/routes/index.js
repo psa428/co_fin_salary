@@ -6,5 +6,6 @@ router.use('/', require('./auth'));
 router.use('/users', require('./user'));
 router.use('/year_inf', require('./year_inf'));
 router.use('/menu', require('./menu'));
+router.use('/month_inf', require('./month_inf'));
 
 module.exports = router;

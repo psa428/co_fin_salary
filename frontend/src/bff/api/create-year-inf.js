@@ -1,5 +1,5 @@
 export const createYearInf = (newYearInf) => {
-    console.log('in API createYearInf', newYearInf)
+    
     fetch(`http://localhost:3000/year_inf`, {
                method: 'POST',
                headers:    {

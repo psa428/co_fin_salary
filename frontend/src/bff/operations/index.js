@@ -11,3 +11,6 @@ export * from './fetch-year-infs';
 export * from './fetch-year-inf';
 export * from './update-year-inf';
 export * from './add-year-inf';
+export * from './fetch-month-infs';
+export * from './add-month-inf';
+export * from './fetch-month-inf'

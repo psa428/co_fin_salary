@@ -13,7 +13,7 @@ const router = express.Router({ mergeParams: true });
 
     // Добавление информации о состоянии на начало года
 router.post('/', authenticated, hasRole([ROLES.ADMIN, ROLES.HOSP]), async (req, res) => {
-    console.log('in router.post ---------------------------------user = ', req.body.user )
+    
     const newYearInf = await addYearInf({
         kdate_lpu: req.body.kdate_lpu,
         kdlpu: req.body.kdlpu,
@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
     //  Редактирование информации о состоянии на начало года
     
     router.patch('/:id', authenticated, hasRole([ROLES.ADMIN, ROLES.HOSP]), async (req, res) => {
-        console.log('in router.patch ' )
+        
         const updatedYearInf = await editYearInf(
             req.params.id,
             {   

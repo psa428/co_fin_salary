@@ -25,10 +25,7 @@ const navigate = useNavigate();
 const kdateLpu = useSelector(selectKdateLpu);
 const kdLpu = useSelector(selectKdLpu);
 
-console.log('in YearInf kdlpu = ', kdLpu, ' kdateLpu = ', kdateLpu)
-
     useEffect(() => {
-        console.log('in YearInf useEffect reload = ', reload)
                
         requestServer('fetchYearInfs', kdateLpu, kdLpu).then((yearInfRes) => {
                 

@@ -14,7 +14,7 @@ const StyledLink = styled(Link)`
     margin: 20px 0;
     font-size:  18px;
 `;
-const YearInfEditContainer = ({ className }) => {
+const MonthInfEditContainer = ({ className }) => {
     const {
         register,
         reset,
@@ -31,7 +31,7 @@ const YearInfEditContainer = ({ className }) => {
     });
     const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
-    const [yearInf, setYearInf] = useState();
+    const [monthInf, setMonthInf] = useState();
     const [yearF, setYearF] = useState();
     const [isNew, setIsNew] = useState(false);  // флаг создания новой записи
     
@@ -47,8 +47,8 @@ const YearInfEditContainer = ({ className }) => {
         
         if (params.id !== '0')   
             //  Редактирование записи       
-            requestServer('fetchYearInf', params.id).then((yearInfRes) => {              
-                    if (yearInfRes.error) {
+            requestServer('fetchMonthInf', params.id).then((monthInfRes) => {              
+                    if (monthInfRes.error) {
                         
                         setLoading(false);
                         // setErrorMessage(yearInfRes.error);
@@ -56,8 +56,8 @@ const YearInfEditContainer = ({ className }) => {
                         return;
                     };
                     
-                    setYearInf(yearInfRes.res.data);    
-                    setYearF(yearInfRes.res.data.year_f);
+                    setMonthInf(monthInfRes.res.data);    
+                    setYearF(monthInfRes.res.data.year_f);
                     
                     setLoading(false);  
                     
@@ -66,22 +66,26 @@ const YearInfEditContainer = ({ className }) => {
         else {
             //  Создать новую запись
             setIsNew(true);
-            setYearInf({ year_f: new Date().getFullYear(), 
+            setMonthInf({ year_f: params.year_f, 
+                month_f:    '',
                 kdate_lpu: params.kdate_lpu, 
                 kdlpu: params.kdlpu,
                 user:   currentUser,
-                doctors: 0,
-                nurses: 0,
-                doctors_need:   0,
-                nurses_need:    0,
-                nss_rest:   0,
+                doctors_taken: 0,
+                nurses_taken: 0,
+                doctors_fired:   0,
+                nurses_fired:    0,
+                doctors_salary:   0,
+                nurses_salary:   0,
                 date_mh_accpt:  '',
+                date_tf_accpt:  '',
                 date_set_ready: '',
+                mh_stat:    '',
+                tf_stat:    '',
                 is_ready:   'false',
-                month_start:    1,
-                month_finish:   12
-
-
+                executor:    '',
+                executor_pos:   '',
+                executor_phone: ''
              })
             
             setLoading(false);  
@@ -97,8 +101,8 @@ const YearInfEditContainer = ({ className }) => {
      */
     const onSubmit = () => {
         
-        requestServer('updateYearInf', yearInf).then((yearInfRes) => {              
-            if (yearInfRes.error) {
+        requestServer('updateMonthInf', monthInf).then((monthInfRes) => {              
+            if (monthInfRes.error) {
                 
                 // setLoading(false);
                 // setErrorMessage(yearInfRes.error);
@@ -124,15 +128,16 @@ const YearInfEditContainer = ({ className }) => {
          *  Обработка нажатия кнопк Создать
          */
     const crtNewRecord = () => {
-        requestServer('addYearInf', yearInf).then((yearInfRes) => {              
-            if (yearInfRes.error) {
+        
+        requestServer('addMonthInf', monthInf).then((monthInfRes) => {              
+            if (monthInfRes.error) {
                 
                 // setLoading(false);
                 // setErrorMessage(yearInfRes.error);
                 return;
             };
             
-            navigate("/year_inf");
+            navigate("/month_inf");
         });
 
     }
@@ -141,102 +146,116 @@ const YearInfEditContainer = ({ className }) => {
         return <div>Загрузка данных</div>
 
     return (
+
         <div className={className}>
-            <h2>Информация о состоянии на начало года</h2>
+            <h2>Заявка МО на софинансирование заработной платы</h2>
+            
             <form onSubmit={handleSubmit(onSubmit)}>
                 
-                Год:
+                Месяц:
                 <Input 
                     type="text" 
-                    name="year-f"
+                    name="month-f"
                     width="100px"
                     placeholder="..." 
                     disabled={false}
-                    value = {yearInf.year_f}
-                    {...register('year_f', {
-                        onChange: (e) => setYearInf({...yearInf, year_f: e.target.value}),
+                    value = {monthInf.month_f}
+                    {...register('month_f', {
+                        onChange: (e) => setMonthInf({...monthInf, month_f: e.target.value}),
                     })} />
                 <br />
-            Численность врачей на 1 января текущего года или на дату<br />
-            распределения объемов предоставления медицинской помощи:    
+            <b>Принято на последнее число месяца</b>  врачей:    
                 <Input 
                     type="text" 
-                    name="doctors"    
+                    name="doctors_taken"    
                     width="100px"          
                     placeholder="..." 
-                    value={yearInf.doctors}
-                    {...register('doctors', {
-                        onChange: (e) => setYearInf({...yearInf, doctors: e.target.value}),
+                    value={monthInf.doctors_taken}
+                    {...register('doctors_taken', {
+                        onChange: (e) => setMonthInf({...monthInf, doctors_taken: e.target.value}),
                     })} />
-                <br />
-            Численность среднего медицинского персонала на 1 января текущего года или на дату<br />
-            распределения объемов предоставления медицинской помощи:    
+                
+            среднего медицинского персонала:    
                 <Input 
                     type="text" 
-                    name="nurses"   
+                    name="nurses_taken"   
                     width="100px"           
                     placeholder="..." 
-                    value={yearInf.nurses}
+                    value={monthInf.nurses_taken}
                     {...register('nurses', {
-                        onChange: (e) => setYearInf({...yearInf, nurses: e.target.value}),
+                        onChange: (e) => setMonthInf({...monthInf, nurses_taken: e.target.value}),
                     })} />
             <br />
-            Потребность на текущий год врачи:    
+            <b>Уволено на последнее число месяца</b>  врачей:    
                 <Input 
                     type="text" 
-                    name="doctors-need"   
+                    name="doctors-fired"   
                     width="100px"           
                     placeholder="..." 
-                    value={yearInf.doctors_need}
-                    {...register('doctors_need', {
-                        onChange: (e) => setYearInf({...yearInf, doctors_need: e.target.value}),
+                    value={monthInf.doctors_fired}
+                    {...register('doctors_fired', {
+                        onChange: (e) => setMonthInf({...monthInf, doctors_fired: e.target.value}),
                     })} />        
-            Средний медицинский персонал:
+            среднего медицинского персонала:
                 <Input 
                     type="text" 
-                    name="nurses-need"   
+                    name="nurses-fired"   
                     width="100px"           
                     placeholder="..." 
-                    value={yearInf.nurses_need}
-                    {...register('nurses_need', {
-                        onChange: (e) => setYearInf({...yearInf, nurses_need: e.target.value}),
+                    value={monthInf.nurses_fired}
+                    {...register('nurses_fired', {
+                        onChange: (e) => setMonthInf({...monthInf, nurses_fired: e.target.value}),
                     })} />  <br />
-            Остаток средств НСЗ в медицинской организации (руб. и коп.)
+            <b>Прирост численности на последнее число месяца</b><br />
+              врачей:    
                 <Input 
                     type="text" 
-                    name="nss-rest"   
+                    name="doctors-growth"   
+                    width="100px"    
+                    readOnly
+                    disabled
+                    value={monthInf.doctors_taken - monthInf.doctors_fired}
+                    onChange={() => {}}
+                />        
+            среднего медицинского персонала:
+                <Input 
+                    type="text" 
+                    name="nurses-fired"   
+                    width="100px"           
+                    readOnly
+                    disabled
+                    value={monthInf.nurses_taken - monthInf.nurses_fired}
+                    onChange={() => {}}
+                />  <br />        
+            <b>Общая сумма за счет средств ОМС начисленной заработной платы и начисления на оплату труда
+            в отчетном месяце на прирост численности, руб. коп.</b><br /><br />
+            врачей:
+                <Input 
+                    type="text" 
+                    name="doctors-salary"   
                     width="100px"           
                     placeholder="..." 
-                    value={yearInf.nss_rest}
-                    {...register('nss_rest', {
-                        onChange: (e) => setYearInf({...yearInf, nss_rest: e.target.value}),
+                    value={monthInf.doctors_salary}
+                    {...register('doctors_salary', {
+                        onChange: (e) => setMonthInf({...monthInf, doctors_salary: e.target.value}),
+                    })} />  
+            среднего медицинского персонала:
+                <Input 
+                    type="text" 
+                    name="nurses-salary"   
+                    width="100px"           
+                    placeholder="..." 
+                    value={monthInf.nurses_salary}
+                    {...register('nurses_salary', {
+                        onChange: (e) => setMonthInf({...monthInf, nurses_salary: e.target.value}),
                     })} />  <br />
-            Месяц начала действия записи)
-                <Input 
-                    type="text" 
-                    name="month-start"   
-                    width="100px"           
-                    placeholder="..." 
-                    value={yearInf.month_start}
-                    {...register('month_start', {
-                        onChange: (e) => setYearInf({...yearInf, month_start: e.target.value}),
-                    })} />
-            Месяц окончания действия записи)
-                <Input 
-                    type="text" 
-                    name="month-finish"   
-                    width="100px"           
-                    placeholder="..." 
-                    value={yearInf.month_finish}
-                    {...register('month_finish', {
-                        onChange: (e) => setYearInf({...yearInf, month_finish: e.target.value}),
-                    })} /> <br />
+            
             Состояние:
                 <select 
                     id="is-ready" 
                     name="is-ready" 
                     style={{width: "200px",height:"30px", margin:"0 10px 10px 10px", font_size:"18px", border: "1px solid #007889"}}
-                    value={yearInf.is_ready}
+                    value={monthInf.is_ready}
                     onChange= {                     
                         (e) => {
                             let dateSetReady; 
@@ -248,7 +267,7 @@ const YearInfEditContainer = ({ className }) => {
                                 dateSetReady = '';                                
                             }
                             
-                            setYearInf({...yearInf, is_ready: e.target.value, date_set_ready: dateSetReady});
+                            setMonthInf({...monthInf, is_ready: e.target.value, date_set_ready: dateSetReady});
                             
                         }
                     }
@@ -263,12 +282,14 @@ const YearInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="date-set-ready"   
+                    value={monthInf.date_set_ready}
                     width="120px" 
                     disabled         
-                    placeholder="..." 
                     
                     {...register('date_set_ready', {
                         onChange: (e) => {},
+                   
+                        
                     })} /> <br />
 
             Дата согласования МЗ КО:
@@ -280,19 +301,74 @@ const YearInfEditContainer = ({ className }) => {
                     placeholder="..." 
                     {...register('date_mh_accpt', {
                         // onChange: (e) => setYearInf({...yearInf, date_mh_accpt: e.target.value}),
-                    })} /> <br />
+                    })} /> 
             
             Комментарий МЗ КО:
                 <Input 
                     type="text" 
                     name="mh-stat"   
-                    width="600px"  
+                    width="330px"  
                     disabled      
                     placeholder="..." 
                     
                     {...register('mh_stat', {
                         // onChange: (e) => setYearInf({...yearInf, mh_stat: e.target.value}),
-                    })} />        
+                    })} /> <br />      
+            Дата согласования ТФОМС:
+                <Input 
+                    type="text" 
+                    name="date-tf-accpt"   
+                    width="100px"  
+                    disabled     
+                    placeholder="..." 
+                    {...register('date_tf', {
+                        // onChange: (e) => setYearInf({...yearInf, date_mh_accpt: e.target.value}),
+                    })} /> 
+            
+            Комментарий ТФОМС:
+                <Input 
+                    type="text" 
+                    name="tf-stat"   
+                    width="320px"  
+                    disabled      
+                    placeholder="..." 
+                    
+                    {...register('tf_stat', {
+                        // onChange: (e) => setYearInf({...yearInf, mh_stat: e.target.value}),
+                    })} />  <br /><br /> 
+
+            Исполнитель:
+                <Input 
+                    type="text" 
+                    name="executor"   
+                    width="150px"           
+                    placeholder="..." 
+                    value={monthInf.executor}
+                    {...register('executor', {
+                        onChange: (e) => setMonthInf({...monthInf, executor: e.target.value}),
+                    })} />  
+            Должность:
+                <Input 
+                    type="text" 
+                    name="executor-pos"   
+                    width="300px"           
+                    placeholder="..." 
+                    value={monthInf.executor_pos}
+                    {...register('executor_pos', {
+                        onChange: (e) => setMonthInf({...monthInf, executor_pos: e.target.value}),
+                    })} />  <br />
+            Телефон:
+                <Input 
+                    type="text" 
+                    name="executor-phone"   
+                    width="100px"           
+                    placeholder="..." 
+                    value={monthInf.executor_phone}
+                    {...register('executor_phone', {
+                        onChange: (e) => setMonthInf({...monthInf, executor_phone: e.target.value}),
+                    })} />  <br />
+
+
 
 
                 <div>
@@ -333,7 +409,7 @@ const YearInfEditContainer = ({ className }) => {
 
 };  
 
-export const YearInfEdit = styled(YearInfEditContainer)`
+export const MonthInfEdit = styled(MonthInfEditContainer)`
     margin: 40px 0;
     padding:    0 80px;
 `

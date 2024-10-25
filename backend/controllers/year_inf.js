@@ -5,8 +5,6 @@ const YearInf = require('../models/YearInf');
 
 //  Добавление
 async function addYearInf(yearInf) {
-
-    console.log('in controller addYearInf')
    
     const newYearInf = await YearInf.create(yearInf);
 

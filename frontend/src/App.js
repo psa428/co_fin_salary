@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
  import { Header} from './components';
  import { useDispatch, useSelector } from 'react-redux';
  import { Post } from './pages/post/post';
- import { InfYear, Bid, Staff, Nss } from './pages';
+ import { InfYear, MonthInf, MonthInfEdit, Staff, Nss } from './pages';
  import { Autorization, Registration, Users } from './pages';
 import styled from 'styled-components';
 import { useLayoutEffect } from 'react';
@@ -11,6 +11,7 @@ import { setUser } from './actions';
 import { selectUserName } from './selectors';
 import { Menu } from './components';
 import { YearInfEdit } from './pages/year-inf-edit/year-inf-edit';
+
 
 const AppColumn = styled.div`
   display:  flex;
@@ -78,8 +79,13 @@ function App() {
             <Route path='/year_inf' element={<InfYear />} />
               <Route path='/year_inf/:id' element={<YearInfEdit />} />
               <Route path='/year_inf/:id/:kdate_lpu/:kdlpu' element={<YearInfEdit />} />
+              
+            <Route path='/month_inf' element={<MonthInf />} />  
+              <Route path='/month_inf/:id' element={<MonthInfEdit />} />
+              <Route path='/month_inf/:id/:kdate_lpu/:kdlpu/:year_f' element={<MonthInfEdit />} />
+
             <Route path='/users' element={<Users />} />
-            <Route path='/bid' element={<Bid />} />
+            
             <Route path='/staff' element={<Staff />} />
             <Route path='/nss' element={<Nss />} />
             <Route path='/post/:id' element={<Post />} />

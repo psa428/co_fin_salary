@@ -12,3 +12,6 @@ export * from './get-year-infs';
 export * from './get-year-inf';
 export * from './set-year-inf';
 export * from './create-year-inf';
+export * from './get-month-infs';
+export * from './create-month-inf';
+export * from './get-month-inf';
