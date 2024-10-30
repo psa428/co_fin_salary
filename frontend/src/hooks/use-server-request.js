@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { selectUserSession } from "../selectors";
 import { server } from "../bff";
 
+
 export const useServerRequest = () => {
     const session = useSelector(selectUserSession);   
      
@@ -10,7 +11,9 @@ export const useServerRequest = () => {
     return useCallback((operation, ...params) => {
       
         const request = ['register', 'authorize', 'fetchMenu', 'fetchYearInfs', 'fetchYearInf', 
-            'updateYearInf', 'addYearInf', 'fetchMonthInfs', 'addMonthInf', 'fetchMonthInf'].includes(operation)
+            'updateYearInf', 'addYearInf', 'fetchMonthInfs', 'addMonthInf', 'fetchMonthInf', 'fetchNssInfs', 
+            'fetchNssInf', 'addNssInf', 'updateNssInf', 'updateMonthInf',
+            'fetchStaffInfs', 'fetchStaffInf', 'updateStaffInf', 'addStaffInf'].includes(operation)
         ? params
         : [session, ...params];     
 

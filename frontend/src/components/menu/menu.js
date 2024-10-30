@@ -41,13 +41,14 @@ const MenuContainer = ({ className }) => {
     return (
         <div className={className}>
             {/* <Content error={errorMessage}> */}
-            
+            {console.log(menuItems)}
             {menuItems ?
            
             <div className="menu-items">
                 <h2>Меню</h2>
                <ul>
                 { 
+                
                 menuItems.map((item, index) => 
                      
                     <li className="menu-item" key={index}>

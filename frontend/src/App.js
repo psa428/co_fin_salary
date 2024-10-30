@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom';
  import { Header} from './components';
  import { useDispatch, useSelector } from 'react-redux';
  import { Post } from './pages/post/post';
- import { InfYear, MonthInf, MonthInfEdit, Staff, Nss } from './pages';
- import { Autorization, Registration, Users } from './pages';
+ import { InfYear, MonthInf, MonthInfEdit, StaffInf, StaffInfEdit,  NssInfEdit } from './pages';
+ import { Autorization, Registration, Users, NssInf } from './pages';
 import styled from 'styled-components';
 import { useLayoutEffect } from 'react';
 import { setUser } from './actions';
@@ -86,8 +86,13 @@ function App() {
 
             <Route path='/users' element={<Users />} />
             
-            <Route path='/staff' element={<Staff />} />
-            <Route path='/nss' element={<Nss />} />
+            <Route path='/staff_inf' element={<StaffInf />} />
+              <Route path='/staff_inf/:id' element={<StaffInfEdit />} />
+              <Route path='/staff_inf/:id/:kdate_lpu/:kdlpu/:year_f/:month_f' element={<StaffInfEdit />} />
+            <Route path='/month_nss' element={<NssInf />} />
+              <Route path='/month_nss/:id' element={<NssInfEdit />} />
+              <Route path='/month_nss/:id/:kdate_lpu/:kdlpu/:year_f' element={<NssInfEdit />} />
+
             <Route path='/post/:id' element={<Post />} />
             <Route path='*' element={<div>Ошибка</div>} />
 

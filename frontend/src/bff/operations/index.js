@@ -14,3 +14,12 @@ export * from './add-year-inf';
 export * from './fetch-month-infs';
 export * from './add-month-inf';
 export * from './fetch-month-inf'
+export * from './fetch-nss-infs';
+export * from './fetch-nss-inf';
+export * from './add-nss-inf';
+export * from './update-nss-inf';
+export * from './update-month-inf';
+export * from './fetch-staff-infs';
+export * from './fetch-staff-inf';
+export * from './update-staff-inf';
+export * from './add-staff-inf';
