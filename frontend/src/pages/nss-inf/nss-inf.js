@@ -29,7 +29,7 @@ const kdLpu = useSelector(selectKdLpu);
 
     useEffect(() => {
         
-        if (!yearF)
+        if (!yearF || !kdateLpu || !kdLpu)
             return;
                
         requestServer('fetchNssInfs', kdateLpu, kdLpu, yearF).then((nssInfRes) => {

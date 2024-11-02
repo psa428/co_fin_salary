@@ -21,14 +21,11 @@ const StaffInfEditContainer = ({ className }) => {
         handleSubmit,
         formState:  { errors }
 
-    } = useForm({
-        defaultValues:  {
-            login:  '',
-            password:   '',
-        },
-        // resolver:   yupResolver(authFormSchema),
-
-    });
+    } = useForm(
+        {
+            mode: "onBlur"
+        } 
+    );
     const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [staffInf, setStaffInf] = useState();
@@ -106,16 +103,20 @@ const StaffInfEditContainer = ({ className }) => {
      * Обработка события нажатия кнопки Сохранить
      */
     const onSubmit = () => {
-        
-        requestServer('updateStaffInf', staffInf).then((staffInfRes) => {              
-            if (staffInfRes.error) {
-                
-                // setLoading(false);
-                // setErrorMessage(yearInfRes.error);
-                return;
-            };
-            navigate(-1);
-        });
+        if (!isNew)
+            //  Сохранить результат редактирования записи
+            requestServer('updateStaffInf', staffInf).then((staffInfRes) => {              
+                if (staffInfRes.error) {
+                    
+                    // setLoading(false);
+                    // setErrorMessage(yearInfRes.error);
+                    return;
+                };
+                navigate(-1);
+            });
+        else
+            //  Создать новую запись
+            crtNewRecord();
     };
 
     /**
@@ -154,13 +155,13 @@ const StaffInfEditContainer = ({ className }) => {
     return (
 
         <div className={className}>
-            <h2>Информация<br /> о сотруднике медицинской организации, <br />зарплата которого финансируется из средств нормированного страхового запаса</h2>
+            <h2>Информация<br /> о сотруднике медицинской организации, зарплата которого <br />финансируется из средств нормированного страхового запаса</h2>
             
             <form onSubmit={handleSubmit(onSubmit)}>
                 
                 Месяц:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="month-f"
                     width="100px"
                     placeholder="..." 
@@ -168,8 +169,12 @@ const StaffInfEditContainer = ({ className }) => {
                     value = {staffInf.month_f}
                     {...register('month_f', {
                         onChange: (e) => setStaffInf({...staffInf, month_f: e.target.value}),
-                    })} />
-                <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.month_f && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.month_f.message}</p>}
+                <br /><br />
             Фамилия:
                 <Input 
                     type="text" 
@@ -179,7 +184,11 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.fam}
                     {...register('fam', {
                         onChange: (e) => setStaffInf({...staffInf, fam: e.target.value}),
-                    })} />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.fam && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.fam.message}</p>}
             Имя:
                 <Input 
                     type="text" 
@@ -189,7 +198,11 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.name}
                     {...register('name', {
                         onChange: (e) => setStaffInf({...staffInf, name: e.target.value}),
-                    })} />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.name && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.name.message}</p>}
             Отчество:
                 <Input 
                     type="text" 
@@ -199,38 +212,39 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.otch}
                     {...register('otch', {
                         onChange: (e) => setStaffInf({...staffInf, otch: e.target.value}),
-                    })} />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.otch && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.otch.message}</p>}
             
-            <br />
+            <br /><br />
             Категория персонала:
             <select  
                     name="kdposition"    
                     value={staffInf.kdposition}   
-                    onChange= {(e) => setStaffInf({...staffInf, kdposition: e.target.value})}           
-                    // {...register('kdposition', {
-                    //     onChange: (e) => {
-                    //         setStaffInf({...staffInf, kdposition: e.target.value})
-                    //         console.log('in select kdposition', staffInf.kdposition)
-                    //     }
-                    // })
-
-                    // }                    
+                    onChange= {(e) => setStaffInf({...staffInf, kdposition: e.target.value})}                                                  
                 >
                     <option disabled >Выберите категорию</option>
                     <option value={1}>врач</option>
                     <option value={2}>средний медицинский персонал</option>
                     
-                </select>  
+            </select>  
             Объем занимаемой должности:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="numst"   
                     width="100px"           
                     placeholder="..." 
                     value={staffInf.numst}
                     {...register('num_st', {
                         onChange: (e) => setStaffInf({...staffInf, numst: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.numst && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.numst.message}</p>}
+                    <br /><br />
             Наименование должности:
                 <Input 
                     type="text" 
@@ -240,7 +254,12 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.name_position}
                     {...register('name_position', {
                         onChange: (e) => setStaffInf({...staffInf, name_position: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.name_position && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.name_position.message}</p>}
+                    <br /><br />
             Дата приема на работу:
                 <Input 
                     type="text" 
@@ -250,7 +269,11 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.emp_date}
                     {...register('date_emp', {
                         onChange: (e) => setStaffInf({...staffInf, emp_date: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.emp_date && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.emp_date.message}</p>} 
             Дата приказа:
                 <Input 
                     type="text" 
@@ -260,7 +283,12 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.order_date}
                     {...register('order_date', {
                         onChange: (e) => setStaffInf({...staffInf, order_date: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.order_date && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.order_date.message}</p>}
+                    <br /><br />
             Номер приказа:            
                 <Input 
                     type="text" 
@@ -270,7 +298,12 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.order_num}
                     {...register('order_num', {
                         onChange: (e) => setStaffInf({...staffInf, order_num: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.order_num && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.order_num.message}</p>}
+                    <br /><br />
 
             Отметка о предоставлении подтверждающих документов:
                 <select 
@@ -283,7 +316,7 @@ const StaffInfEditContainer = ({ className }) => {
                     <option value={true}>документы представлены</option>
                     
                 </select>  
-                <br />
+                <br /><br />
             Зарплата:            
                 <Input 
                     type="number" 
@@ -293,7 +326,11 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.salary}
                     {...register('salary', {
                         onChange: (e) => setStaffInf({...staffInf, salary: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.salary && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.salary.message}</p>}  
             Начисления на заработную плату:            
                 <Input 
                     type="number" 
@@ -303,7 +340,12 @@ const StaffInfEditContainer = ({ className }) => {
                     value={staffInf.charges}
                     {...register('charges', {
                         onChange: (e) => setStaffInf({...staffInf, charges: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.charges && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.charges.message}</p>}
+                    <br /><br />
             
             
             Состояние:
@@ -394,25 +436,15 @@ const StaffInfEditContainer = ({ className }) => {
                     })} />  <br /><br /> 
 
             
-                <div>
-                    
-                    <Button 
-                        type="button" 
-                        className="button-create"
-                        width="150px" 
-                        margin="30px"
-                        display="inline" 
-                        visibility={(!isNew || !!formError) ? "hidden" : ""}
-                        onClick={() => crtNewRecord()}>
-                        Создать
-                    </Button>
+                <div>                    
                     <Button 
                         type="submit" 
                         className="button-update"
                         width="150px" 
                         margin="30px" 
                         display="inline" 
-                        visibility={(!!formError || isNew) ? "hidden" : ""}>
+                        // visibility={(!!formError || isNew) ? "hidden" : ""}
+                    >
                         Сохранить
                     </Button>
                     <Button type="button" 

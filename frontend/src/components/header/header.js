@@ -15,9 +15,9 @@ const Discription = styled.div`
 const HeaderContainer = ({ className }) => (
     <header className={className}>
       
-      {/* <Link to="/"> */}
-        <img src="https://kemoms.ru/img/logo_horizontal.png" alt='logo' />
-      {/* </Link> */}
+      <Link to="/">
+        <img src="https://kemoms.ru/img/logo_horizontal.png" width="220" height="80"  alt='logo' />
+      </Link>
         {/* <Logo /> */}
         <Discription>
           Учет заявок медицинских организаций<br /> на софинансирование заработной платы

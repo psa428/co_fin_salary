@@ -28,7 +28,7 @@ const kdLpu = useSelector(selectKdLpu);
 
     useEffect(() => {
         
-        if (!yearF)
+        if (!yearF || !kdateLpu || !kdLpu )
             return;
                
         requestServer('fetchMonthInfs', kdateLpu, kdLpu, yearF).then((monthInfRes) => {

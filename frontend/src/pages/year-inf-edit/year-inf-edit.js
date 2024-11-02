@@ -21,14 +21,11 @@ const YearInfEditContainer = ({ className }) => {
         handleSubmit,
         formState:  { errors }
 
-    } = useForm({
-        defaultValues:  {
-            login:  '',
-            password:   '',
-        },
-        // resolver:   yupResolver(authFormSchema),
-
-    });
+    } = useForm(
+        {
+            mode: "onBlur"
+        }        
+    );
     const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [yearInf, setYearInf] = useState();
@@ -48,21 +45,17 @@ const YearInfEditContainer = ({ className }) => {
         if (params.id !== '0')   
             //  Редактирование записи       
             requestServer('fetchYearInf', params.id).then((yearInfRes) => {              
-                    if (yearInfRes.error) {
-                        
-                        setLoading(false);
-                        // setErrorMessage(yearInfRes.error);
-                        
-                        return;
-                    };
+                if (yearInfRes.error) {
                     
-                    setYearInf(yearInfRes.res.data);    
-                    setYearF(yearInfRes.res.data.year_f);
+                    setLoading(false);
+                    // setErrorMessage(yearInfRes.error);
                     
-                    setLoading(false);  
-                    
-                    
-                });
+                    return;
+                };                    
+                setYearInf(yearInfRes.res.data);    
+                setYearF(yearInfRes.res.data.year_f);  
+                setLoading(false);                      
+            });
         else {
             //  Создать новую запись
             setIsNew(true);
@@ -80,15 +73,10 @@ const YearInfEditContainer = ({ className }) => {
                 is_ready:   'false',
                 month_start:    1,
                 month_finish:   12
-
-
              })
             
             setLoading(false);  
-
-        }
-                   
-            
+        }                             
     }, [requestServer, params.id])
         
     
@@ -96,16 +84,20 @@ const YearInfEditContainer = ({ className }) => {
      * Обработка события нажатия кнопки Сохранить
      */
     const onSubmit = () => {
-        
-        requestServer('updateYearInf', yearInf).then((yearInfRes) => {              
-            if (yearInfRes.error) {
-                
-                // setLoading(false);
-                // setErrorMessage(yearInfRes.error);
-                return;
-            };
-            navigate(-1);
-        });
+        if (!isNew)
+            // Сохранение информации
+            requestServer('updateYearInf', yearInf).then((yearInfRes) => {              
+                if (yearInfRes.error) {
+                    
+                    // setLoading(false);
+                    // setErrorMessage(yearInfRes.error);
+                    return;
+                };
+                navigate(-1);
+            });
+        else
+            // Добавление новой записи
+            crtNewRecord();
     };
 
     /**
@@ -121,7 +113,7 @@ const YearInfEditContainer = ({ className }) => {
     }
 
         /**
-         *  Обработка нажатия кнопк Создать
+         *  Создать новую запись
          */
     const crtNewRecord = () => {
         requestServer('addYearInf', yearInf).then((yearInfRes) => {              
@@ -147,81 +139,114 @@ const YearInfEditContainer = ({ className }) => {
                 
                 Год:
                 <Input 
-                    type="text" 
-                    name="year-f"
+                    type="number" 
+                    name="year_f"
                     width="100px"
                     placeholder="..." 
                     disabled={false}
                     value = {yearInf.year_f}
                     {...register('year_f', {
                         onChange: (e) => setYearInf({...yearInf, year_f: e.target.value}),
-                    })} />
-                <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.year_f && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.year_f.message}</p>}
+                    
+                <br /><br />
             Численность врачей на 1 января текущего года или на дату<br />
             распределения объемов предоставления медицинской помощи:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="doctors"    
                     width="100px"          
                     placeholder="..." 
                     value={yearInf.doctors}
                     {...register('doctors', {
                         onChange: (e) => setYearInf({...yearInf, doctors: e.target.value}),
+                        required:   'Поле является обязательным для заполнения',      
                     })} />
-                <br />
+                    {errors.doctors && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.doctors.message}</p>}
+                <br /><br />
             Численность среднего медицинского персонала на 1 января текущего года или на дату<br />
             распределения объемов предоставления медицинской помощи:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nurses"   
                     width="100px"           
                     placeholder="..." 
                     value={yearInf.nurses}
                     {...register('nurses', {
                         onChange: (e) => setYearInf({...yearInf, nurses: e.target.value}),
+                        required:   'Поле является обязательным для заполнения',      
                     })} />
-            <br />
+                    {errors.nurses && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.nurses.message}</p>}
+                <br /><br />
             Потребность на текущий год врачи:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="doctors-need"   
                     width="100px"           
                     placeholder="..." 
                     value={yearInf.doctors_need}
                     {...register('doctors_need', {
                         onChange: (e) => setYearInf({...yearInf, doctors_need: e.target.value}),
-                    })} />        
+                        required:   'Поле является обязательным для заполнения',      
+                    })} />
+                    {errors.doctors_need && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.doctors_need.message}</p>}      
             Средний медицинский персонал:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nurses-need"   
                     width="100px"           
                     placeholder="..." 
                     value={yearInf.nurses_need}
                     {...register('nurses_need', {
                         onChange: (e) => setYearInf({...yearInf, nurses_need: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',      
+                    })} />
+                    {errors.nurses_need && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.nurses_need.message}</p>}
+                    <br /><br />
             Остаток средств НСЗ в медицинской организации (руб. и коп.)
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nss-rest"   
                     width="100px"           
                     placeholder="..." 
                     value={yearInf.nss_rest}
                     {...register('nss_rest', {
                         onChange: (e) => setYearInf({...yearInf, nss_rest: e.target.value}),
-                    })} />  <br />
-            Месяц начала действия записи)
+                        required:   'Поле является обязательным для заполнения',      
+                    })} />
+                    {errors.nss_rest && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.nss_rest.message}</p>}
+                    <br /><br />
+            Месяц начала действия записи
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="month-start"   
                     width="100px"           
                     placeholder="..." 
                     value={yearInf.month_start}
                     {...register('month_start', {
                         onChange: (e) => setYearInf({...yearInf, month_start: e.target.value}),
+                        required:   'Поле является обязательным для заполнения',   
+                        min:    {
+                            value:  1,
+                            message:    'Значение поля не может быть меньше 1'
+                        },
+                        max: {
+                            value:  12,
+                            message:    "значение поля не может быть больше 12"
+                        }   
                     })} />
-            Месяц окончания действия записи)
+                    {errors.month_start && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.month_start.message}</p>}
+            Месяц окончания действия записи
                 <Input 
                     type="text" 
                     name="month-finish"   
@@ -230,7 +255,18 @@ const YearInfEditContainer = ({ className }) => {
                     value={yearInf.month_finish}
                     {...register('month_finish', {
                         onChange: (e) => setYearInf({...yearInf, month_finish: e.target.value}),
-                    })} /> <br />
+                        min:    {
+                            value:  1,
+                            message:    'Значение поля не может быть меньше 1'
+                        },
+                        max: {
+                            value:  12,
+                            message:    "значение поля не может быть больше 12"
+                        }   
+                    })} />
+                    {errors.month_finish && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                    {errors.month_finish.message}</p>}
+                    <br /><br />
             Состояние:
                 <select 
                     id="is-ready" 
@@ -296,24 +332,14 @@ const YearInfEditContainer = ({ className }) => {
 
 
                 <div>
-                    
-                    <Button 
-                        type="button" 
-                        className="button-create"
-                        width="150px" 
-                        margin="30px"
-                        display="inline" 
-                        visibility={(!isNew || !!formError) ? "hidden" : ""}
-                        onClick={() => crtNewRecord()}>
-                        Создать
-                    </Button>
                     <Button 
                         type="submit" 
                         className="button-update"
                         width="150px" 
                         margin="30px" 
                         display="inline" 
-                        visibility={(!!formError || isNew) ? "hidden" : ""}>
+                        // visibility={(!!formError || isNew) ? "hidden" : ""}
+                    >
                         Сохранить
                     </Button>
                     <Button type="button" 
@@ -324,7 +350,7 @@ const YearInfEditContainer = ({ className }) => {
                     </Button>
                 </div> 
                 {/* {errorMessage && <AuthFormError>{errorMessage}</AuthFormError>} */}
-                <StyledLink to="/register">Регистрация</StyledLink>
+                
                 
             </form>    
         </div>
@@ -336,4 +362,11 @@ const YearInfEditContainer = ({ className }) => {
 export const YearInfEdit = styled(YearInfEditContainer)`
     margin: 40px 0;
     padding:    0 80px;
+
+    & > .error-message {
+            color: "red"; 
+            fontSize: "smaller"; 
+            position: "absolute"; 
+            margin: "0";
+        }
 `

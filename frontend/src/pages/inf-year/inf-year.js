@@ -16,7 +16,7 @@ const InfYearContainer = ({ className }) => {
      */
 
 const requestServer = useServerRequest();
-const [yearF, setYearF] = useState(2024);
+// const [yearF, setYearF] = useState(2024);
 const [yearInfs, setYearInfs] = useState(null);
 const [errorMessage, setErrorMessage] = useState(null);
 const [reload, setReload] = useState();    // флаг необходимо загрузить информацию из базы данных
@@ -25,21 +25,23 @@ const navigate = useNavigate();
 const kdateLpu = useSelector(selectKdateLpu);
 const kdLpu = useSelector(selectKdLpu);
 
+
     useEffect(() => {
-               
-        requestServer('fetchYearInfs', kdateLpu, kdLpu).then((yearInfRes) => {
-                
-                if (yearInfRes.error) {
+        
+        if (kdateLpu && kdLpu)       
+            requestServer('fetchYearInfs', kdateLpu, kdLpu).then((yearInfRes) => {
                     
-                    setErrorMessage(yearInfRes.error);
-                    return;
-                };
-                
-                setYearInfs(yearInfRes.res.data.yearInfs);
-                setReload(0);
-                
-                
-            });
+                    if (yearInfRes.error) {
+                        
+                        setErrorMessage(yearInfRes.error);
+                        return;
+                    };
+                    
+                    setYearInfs(yearInfRes.res.data.yearInfs);
+                    setReload(0);
+                    
+                    
+                });
         
         
     }, [requestServer, kdateLpu, kdLpu, reload]);
@@ -56,11 +58,16 @@ const kdLpu = useSelector(selectKdLpu);
     return (
         <div className={className}>
             <h1>Информация на начало года</h1>
-            <div>
-                <Button type="button" width="150px" margin="30px" display="inline" 
+            <div className="button-container">
+                <Button type="button" width="100px" margin="10px" display="inline" 
                     
                     onClick={() => handleClickCreateYearInf()}>
                     Создать
+                </Button>
+                <Button type="button" width="100px" margin="10px" display="inline"  
+                    
+                    onClick={() => navigate('/')}>
+                    Назад
                 </Button>
             </div>
             <div>
@@ -101,5 +108,11 @@ export const InfYear = styled(InfYearContainer)`
     margin: 40px 0;
     padding:    0 80px;
     color:  #007889;
+
+    & > .button-container {
+            display:    flex;
+            justify-content:  right;
+        }        
+
 
 `;

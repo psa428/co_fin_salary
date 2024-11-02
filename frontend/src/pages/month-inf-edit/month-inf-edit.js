@@ -21,14 +21,11 @@ const MonthInfEditContainer = ({ className }) => {
         handleSubmit,
         formState:  { errors }
 
-    } = useForm({
-        defaultValues:  {
-            login:  '',
-            password:   '',
-        },
-        // resolver:   yupResolver(authFormSchema),
-
-    });
+    } = useForm(
+        {
+            mode:   "onbBur"
+        }
+    );
     const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [monthInf, setMonthInf] = useState();
@@ -100,16 +97,20 @@ const MonthInfEditContainer = ({ className }) => {
      * Обработка события нажатия кнопки Сохранить
      */
     const onSubmit = () => {
-        
-        requestServer('updateMonthInf', monthInf).then((monthInfRes) => {              
-            if (monthInfRes.error) {
-                
-                // setLoading(false);
-                // setErrorMessage(yearInfRes.error);
-                return;
-            };
-            navigate(-1);
-        });
+        if (isNew)   
+            //  Сохранить запись после дерактирования    
+            requestServer('updateMonthInf', monthInf).then((monthInfRes) => {              
+                if (monthInfRes.error) {
+                    
+                    // setLoading(false);
+                    // setErrorMessage(yearInfRes.error);
+                    return;
+                };
+                navigate(-1);
+            });
+        else
+            // Вставить новую запись
+            crtNewRecord();
     };
 
     /**
@@ -154,7 +155,7 @@ const MonthInfEditContainer = ({ className }) => {
                 
                 Месяц:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="month-f"
                     width="100px"
                     placeholder="..." 
@@ -162,54 +163,75 @@ const MonthInfEditContainer = ({ className }) => {
                     value = {monthInf.month_f}
                     {...register('month_f', {
                         onChange: (e) => setMonthInf({...monthInf, month_f: e.target.value}),
-                    })} />
-                <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.month_f && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.month_f.message}</p>}
+                <br /><br />
             <b>Принято на последнее число месяца</b>  врачей:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="doctors_taken"    
                     width="100px"          
                     placeholder="..." 
                     value={monthInf.doctors_taken}
                     {...register('doctors_taken', {
                         onChange: (e) => setMonthInf({...monthInf, doctors_taken: e.target.value}),
-                    })} />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.doctors_taken && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.doctors_taken.message}</p>}
                 
             среднего медицинского персонала:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nurses_taken"   
                     width="100px"           
                     placeholder="..." 
                     value={monthInf.nurses_taken}
                     {...register('nurses', {
                         onChange: (e) => setMonthInf({...monthInf, nurses_taken: e.target.value}),
-                    })} />
-            <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nurses_taken && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nurses_taken.message}</p>}
+            <br /><br />
             <b>Уволено на последнее число месяца</b>  врачей:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="doctors-fired"   
                     width="100px"           
                     placeholder="..." 
                     value={monthInf.doctors_fired}
                     {...register('doctors_fired', {
                         onChange: (e) => setMonthInf({...monthInf, doctors_fired: e.target.value}),
-                    })} />        
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.doctors_fired && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.doctors_fired.message}</p>}      
             среднего медицинского персонала:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nurses-fired"   
                     width="100px"           
                     placeholder="..." 
                     value={monthInf.nurses_fired}
                     {...register('nurses_fired', {
                         onChange: (e) => setMonthInf({...monthInf, nurses_fired: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nurses_fired && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nurses_fired.message}</p>} 
+                    <br /><br />
             <b>Прирост численности на последнее число месяца</b><br />
               врачей:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="doctors-growth"   
                     width="100px"    
                     readOnly
@@ -219,8 +241,8 @@ const MonthInfEditContainer = ({ className }) => {
                 />        
             среднего медицинского персонала:
                 <Input 
-                    type="text" 
-                    name="nurses-fired"   
+                    type="number" 
+                    name="nurses-growth"   
                     width="100px"           
                     readOnly
                     disabled
@@ -231,24 +253,33 @@ const MonthInfEditContainer = ({ className }) => {
             в отчетном месяце на прирост численности, руб. коп.</b><br /><br />
             врачей:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="doctors-salary"   
                     width="100px"           
                     placeholder="..." 
                     value={monthInf.doctors_salary}
                     {...register('doctors_salary', {
                         onChange: (e) => setMonthInf({...monthInf, doctors_salary: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.doctors_salary && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.doctors_salary.message}</p>}
             среднего медицинского персонала:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nurses-salary"   
                     width="100px"           
                     placeholder="..." 
                     value={monthInf.nurses_salary}
                     {...register('nurses_salary', {
                         onChange: (e) => setMonthInf({...monthInf, nurses_salary: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nurses_salary && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nurses_salary.message}</p>}
+                    <br /><br />
             
             Состояние:
                 <select 
@@ -346,7 +377,11 @@ const MonthInfEditContainer = ({ className }) => {
                     value={monthInf.executor}
                     {...register('executor', {
                         onChange: (e) => setMonthInf({...monthInf, executor: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.executor && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.executor.message}</p>}
             Должность:
                 <Input 
                     type="text" 
@@ -356,7 +391,12 @@ const MonthInfEditContainer = ({ className }) => {
                     value={monthInf.executor_pos}
                     {...register('executor_pos', {
                         onChange: (e) => setMonthInf({...monthInf, executor_pos: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.executor_pos && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.executor_pos.message}</p>}
+                    <br /><br />
             Телефон:
                 <Input 
                     type="text" 
@@ -366,30 +406,23 @@ const MonthInfEditContainer = ({ className }) => {
                     value={monthInf.executor_phone}
                     {...register('executor_phone', {
                         onChange: (e) => setMonthInf({...monthInf, executor_phone: e.target.value}),
-                    })} />  <br />
-
-
-
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.executor_phone && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.executor_phone.message}</p>}
+                    <br /><br />
 
                 <div>
                     
-                    <Button 
-                        type="button" 
-                        className="button-create"
-                        width="150px" 
-                        margin="30px"
-                        display="inline" 
-                        visibility={(!isNew || !!formError) ? "hidden" : ""}
-                        onClick={() => crtNewRecord()}>
-                        Создать
-                    </Button>
                     <Button 
                         type="submit" 
                         className="button-update"
                         width="150px" 
                         margin="30px" 
                         display="inline" 
-                        visibility={(!!formError || isNew) ? "hidden" : ""}>
+                        // visibility={(!!formError || isNew) ? "hidden" : ""}
+                    >
                         Сохранить
                     </Button>
                     <Button type="button" 

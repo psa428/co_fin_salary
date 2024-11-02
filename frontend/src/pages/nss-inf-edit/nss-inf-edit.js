@@ -22,13 +22,9 @@ const NssInfEditContainer = ({ className }) => {
         formState:  { errors }
 
     } = useForm({
-        defaultValues:  {
-            login:  '',
-            password:   '',
-        },
-        // resolver:   yupResolver(authFormSchema),
-
-    });
+            mode:   "onBlur"
+        }
+    );
     const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [nssInf, setNssInf] = useState();
@@ -99,16 +95,20 @@ const NssInfEditContainer = ({ className }) => {
      * Обработка события нажатия кнопки Сохранить
      */
     const onSubmit = () => {
-        
-        requestServer('updateNssInf', nssInf).then((nssInfRes) => {              
-            if (nssInfRes.error) {
-                
-                // setLoading(false);
-                // setErrorMessage(yearInfRes.error);
-                return;
-            };
-            navigate(-1);
-        });
+        if (isNew)
+            //  Сохранить результаты редактирования записи
+            requestServer('updateNssInf', nssInf).then((nssInfRes) => {              
+                if (nssInfRes.error) {
+                    
+                    // setLoading(false);
+                    // setErrorMessage(yearInfRes.error);
+                    return;
+                };
+                navigate(-1);
+            });
+        else
+            //  Добавить новую запись
+            crtNewRecord();
     };
 
     /**
@@ -153,7 +153,7 @@ const NssInfEditContainer = ({ className }) => {
                 
                 Месяц:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="month-f"
                     width="100px"
                     placeholder="..." 
@@ -161,50 +161,72 @@ const NssInfEditContainer = ({ className }) => {
                     value = {nssInf.month_f}
                     {...register('month_f', {
                         onChange: (e) => setNssInf({...nssInf, month_f: e.target.value}),
-                    })} />
-                <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.month_f && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.month_f.message}</p>}
+                <br /><br />
             <b>Поступило средств НСЗ в МО</b>  врачей:    
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nss_received"    
                     width="100px"          
                     placeholder="..." 
                     value={nssInf.nss_received}
                     {...register('nss_received', {
                         onChange: (e) => setNssInf({...nssInf, nss_received: e.target.value}),
-                    })} />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nss_received && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nss_received.message}</p>}
             
-            <br />
+            <br /><br />
             Использовано средств НСЗ на оплату труда врачей:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nss_doctors_month"   
                     width="100px"           
                     placeholder="..." 
                     value={nssInf.nss_doctors_month}
                     {...register('nss_doctors_month', {
                         onChange: (e) => setNssInf({...nssInf, nss_doctors_month: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nss_doctors_month && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nss_doctors_month.message}</p>}
             Использовано средств НСЗ на оплату труда среднего медицинского персонала:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nss_nurses_month"   
                     width="100px"           
                     placeholder="..." 
                     value={nssInf.nss_nurses_month}
                     {...register('nss_nurses_month', {
                         onChange: (e) => setNssInf({...nssInf, nss_nurses_month: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nss_nurses_month && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nss_nurses_month.message}</p>} 
+                    <br /><br />
             Возвращено средств НСЗ в бюджет ТФОМС:
                 <Input 
-                    type="text" 
+                    type="number" 
                     name="nss-ret-month"   
                     width="100px"           
                     placeholder="..." 
                     value={nssInf.nss_ret_month}
                     {...register('nss_ret_month', {
                         onChange: (e) => setNssInf({...nssInf, nss_ret_month: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.nss_ret_month && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.nss_ret_month.message}</p>} 
+                    <br /><br />
             
             Состояние:
                 <select 
@@ -280,7 +302,11 @@ const NssInfEditContainer = ({ className }) => {
                     value={nssInf.executor}
                     {...register('executor', {
                         onChange: (e) => setNssInf({...nssInf, executor: e.target.value}),
-                    })} />  
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.executor && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.executor.message}</p>} 
             Должность:
                 <Input 
                     type="text" 
@@ -290,7 +316,12 @@ const NssInfEditContainer = ({ className }) => {
                     value={nssInf.executor_pos}
                     {...register('executor_pos', {
                         onChange: (e) => setNssInf({...nssInf, executor_pos: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.executor_pos && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.executor_pos.message}</p>}
+                    <br /><br />
             Телефон:
                 <Input 
                     type="text" 
@@ -300,30 +331,22 @@ const NssInfEditContainer = ({ className }) => {
                     value={nssInf.executor_phone}
                     {...register('executor_phone', {
                         onChange: (e) => setNssInf({...nssInf, executor_phone: e.target.value}),
-                    })} />  <br />
+                        required:   'Поле является обязательным для заполнения',                                                
+                    })}                     
+                    />
+                    {errors.executor_phone && <p style={{color: "red", fontSize: "smaller", position: "absolute", margin: "0"}}>
+                        {errors.executor_phone.message}</p>} 
+                    <br /><br />
 
-
-
-
-                <div>
-                    
-                    <Button 
-                        type="button" 
-                        className="button-create"
-                        width="150px" 
-                        margin="30px"
-                        display="inline" 
-                        visibility={(!isNew || !!formError) ? "hidden" : ""}
-                        onClick={() => crtNewRecord()}>
-                        Создать
-                    </Button>
+                <div>                    
                     <Button 
                         type="submit" 
                         className="button-update"
                         width="150px" 
                         margin="30px" 
                         display="inline" 
-                        visibility={(!!formError || isNew) ? "hidden" : ""}>
+                        // visibility={(!!formError || isNew) ? "hidden" : ""}
+                    >
                         Сохранить
                     </Button>
                     <Button type="button" 
