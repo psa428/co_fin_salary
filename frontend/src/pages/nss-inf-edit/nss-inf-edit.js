@@ -17,7 +17,7 @@ const StyledLink = styled(Link)`
 const NssInfEditContainer = ({ className }) => {
     const {
         register,
-        reset,
+        // reset,
         handleSubmit,
         formState:  { errors }
 
@@ -25,13 +25,13 @@ const NssInfEditContainer = ({ className }) => {
             mode:   "onBlur"
         }
     );
-    const [serverError, setServerError] = useState(null);
+    // const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [nssInf, setNssInf] = useState();
     const [yearF, setYearF] = useState();
     const [isNew, setIsNew] = useState(false);  // флаг создания новой записи
     
-    const formError = false;
+    // const formError = false;
     const navigate = useNavigate();
 
     const params = useParams();
@@ -274,7 +274,8 @@ const NssInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="tf-accpt"   
-                    width="100px"  
+                    value={nssInf.tf_accpt}
+                    width="120px"  
                     disabled     
                     placeholder="..." 
                     {...register('tf_accpt', {
@@ -285,7 +286,8 @@ const NssInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="tf-stat"   
-                    width="320px"  
+                    value={nssInf.tf_stat}
+                    width="300px"  
                     disabled      
                     placeholder="..." 
                     
@@ -326,7 +328,7 @@ const NssInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="executor-phone"   
-                    width="100px"           
+                    width="200px"           
                     placeholder="..." 
                     value={nssInf.executor_phone}
                     {...register('executor_phone', {
@@ -346,6 +348,7 @@ const NssInfEditContainer = ({ className }) => {
                         margin="30px" 
                         display="inline" 
                         // visibility={(!!formError || isNew) ? "hidden" : ""}
+                        visibility={!!nssInf.tf_accpt ? "hidden" : ""}
                     >
                         Сохранить
                     </Button>

@@ -17,7 +17,7 @@ const StyledLink = styled(Link)`
 const StaffInfEditContainer = ({ className }) => {
     const {
         register,
-        reset,
+        // reset,
         handleSubmit,
         formState:  { errors }
 
@@ -26,13 +26,13 @@ const StaffInfEditContainer = ({ className }) => {
             mode: "onBlur"
         } 
     );
-    const [serverError, setServerError] = useState(null);
+    // const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [staffInf, setStaffInf] = useState();
     const [yearF, setYearF] = useState();
     const [isNew, setIsNew] = useState(false);  // флаг создания новой записи
     
-    const formError = false;
+    // const formError = false;
     const navigate = useNavigate();
 
     const params = useParams();
@@ -392,7 +392,8 @@ const StaffInfEditContainer = ({ className }) => {
             Дата согласования МЗ КО:
                 <Input 
                     type="text" 
-                    name="mh-accpt"   
+                    name="mh-accpt"  
+                    value={staffInf.mh_accpt} 
                     width="130px"  
                     disabled     
                     placeholder="..." 
@@ -403,7 +404,8 @@ const StaffInfEditContainer = ({ className }) => {
             Комментарий МЗ КО:
                 <Input 
                     type="text" 
-                    name="mh-stat"   
+                    name="mh-stat"  
+                    value={staffInf.mh_stat} 
                     width="300px"  
                     disabled      
                     placeholder="..." 
@@ -415,7 +417,8 @@ const StaffInfEditContainer = ({ className }) => {
             Дата согласования ТФОМС:
                 <Input 
                     type="text" 
-                    name="tf-accpt"   
+                    name="tf-accpt"  
+                    value={staffInf.tf_accpt} 
                     width="120px"  
                     disabled     
                     placeholder="..." 
@@ -426,7 +429,8 @@ const StaffInfEditContainer = ({ className }) => {
             Комментарий ТФОМС:
                 <Input 
                     type="text" 
-                    name="tf-stat"   
+                    name="tf-stat"
+                    value={staffInf.tf_stat}   
                     width="300px"  
                     disabled      
                     placeholder="..." 
@@ -444,6 +448,7 @@ const StaffInfEditContainer = ({ className }) => {
                         margin="30px" 
                         display="inline" 
                         // visibility={(!!formError || isNew) ? "hidden" : ""}
+                        visibility={(!!staffInf.mh_accpt || !!staffInf.tf_accpt) ? "hidden" : ""}
                     >
                         Сохранить
                     </Button>

@@ -101,7 +101,7 @@ const AutorizationContainer = ({ className }) => {
                         onChange: () => setServerError(null),
                     })}
                 />
-                <Button type="submit" disabled={!!formError}>
+                <Button type="submit" margin="0 10px 0 10px" disabled={!!formError}>
                     Авторизоваться
                 </Button>
                 {errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}

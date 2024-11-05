@@ -1,4 +1,4 @@
-import { Logo } from './components/logo/logo';        //'./components/logo/logo';
+// import { Logo } from './components/logo_delete/logo';        //'./components/logo/logo';
 import { ControlPanel } from './components/control-panel/control-panel';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';

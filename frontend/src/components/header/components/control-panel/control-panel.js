@@ -31,6 +31,7 @@ const ControlPanelContainer = ({ className }) => {
     const onLogout = () => {
         dispatch(logout());
         sessionStorage.removeItem('userData');
+        navigate('/');
     }
 
     return (

@@ -17,7 +17,7 @@ const StyledLink = styled(Link)`
 const YearInfEditContainer = ({ className }) => {
     const {
         register,
-        reset,
+        // reset,
         handleSubmit,
         formState:  { errors }
 
@@ -26,13 +26,13 @@ const YearInfEditContainer = ({ className }) => {
             mode: "onBlur"
         }        
     );
-    const [serverError, setServerError] = useState(null);
+    // const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [yearInf, setYearInf] = useState();
     const [yearF, setYearF] = useState();
     const [isNew, setIsNew] = useState(false);  // флаг создания новой записи
     
-    const formError = false;
+    // const formError = false;
     const navigate = useNavigate();
 
     const params = useParams();
@@ -311,7 +311,8 @@ const YearInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="date-mh-accpt"   
-                    width="100px"  
+                    value={yearInf.mh_accpt}
+                    width="120px"  
                     disabled     
                     placeholder="..." 
                     {...register('date_mh_accpt', {
@@ -322,6 +323,7 @@ const YearInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="mh-stat"   
+                    value={yearInf.mh_stat}
                     width="600px"  
                     disabled      
                     placeholder="..." 
@@ -339,12 +341,14 @@ const YearInfEditContainer = ({ className }) => {
                         margin="30px" 
                         display="inline" 
                         // visibility={(!!formError || isNew) ? "hidden" : ""}
+                        visibility={!!yearInf.mh_accpt ? "hidden" : ""}
                     >
                         Сохранить
                     </Button>
                     <Button type="button" 
                         width="150px" margin="30px auto auto 10px" display="inline"
                         onClick = {() => navigate(-1)}
+                        
                     >
                         Назад
                     </Button>

@@ -17,7 +17,7 @@ const StyledLink = styled(Link)`
 const MonthInfEditContainer = ({ className }) => {
     const {
         register,
-        reset,
+        // reset,
         handleSubmit,
         formState:  { errors }
 
@@ -26,13 +26,13 @@ const MonthInfEditContainer = ({ className }) => {
             mode:   "onbBur"
         }
     );
-    const [serverError, setServerError] = useState(null);
+    // const [serverError, setServerError] = useState(null);
     const [loading,setLoading]=useState(true);
     const [monthInf, setMonthInf] = useState();
     const [yearF, setYearF] = useState();
     const [isNew, setIsNew] = useState(false);  // флаг создания новой записи
     
-    const formError = false;
+    // const formError = false;
     const navigate = useNavigate();
 
     const params = useParams();
@@ -74,8 +74,8 @@ const MonthInfEditContainer = ({ className }) => {
                 nurses_fired:    0,
                 doctors_salary:   0,
                 nurses_salary:   0,
-                date_mh_accpt:  '',
-                date_tf_accpt:  '',
+                mh_accpt:  '',
+                tf_accpt:  '',
                 date_set_ready: '',
                 mh_stat:    '',
                 tf_stat:    '',
@@ -326,11 +326,12 @@ const MonthInfEditContainer = ({ className }) => {
             Дата согласования МЗ КО:
                 <Input 
                     type="text" 
-                    name="date-mh-accpt"   
+                    name="mh-accpt"   
+                    value={monthInf.mh_accpt}
                     width="100px"  
                     disabled     
                     placeholder="..." 
-                    {...register('date_mh_accpt', {
+                    {...register('mh_accpt', {
                         // onChange: (e) => setYearInf({...yearInf, date_mh_accpt: e.target.value}),
                     })} /> 
             
@@ -338,6 +339,7 @@ const MonthInfEditContainer = ({ className }) => {
                 <Input 
                     type="text" 
                     name="mh-stat"   
+                    value={monthInf.mh_stat}
                     width="330px"  
                     disabled      
                     placeholder="..." 
@@ -348,18 +350,20 @@ const MonthInfEditContainer = ({ className }) => {
             Дата согласования ТФОМС:
                 <Input 
                     type="text" 
-                    name="date-tf-accpt"   
+                    name="tf-accpt"  
+                    value={monthInf.tf_accpt} 
                     width="100px"  
                     disabled     
                     placeholder="..." 
-                    {...register('date_tf', {
+                    {...register('tf_accpt', {
                         // onChange: (e) => setYearInf({...yearInf, date_mh_accpt: e.target.value}),
                     })} /> 
             
             Комментарий ТФОМС:
                 <Input 
                     type="text" 
-                    name="tf-stat"   
+                    name="tf-stat"  
+                    value={monthInf.tf_stat}
                     width="320px"  
                     disabled      
                     placeholder="..." 
@@ -422,6 +426,7 @@ const MonthInfEditContainer = ({ className }) => {
                         margin="30px" 
                         display="inline" 
                         // visibility={(!!formError || isNew) ? "hidden" : ""}
+                        visibility={(!!monthInf.mh_accpt || !!monthInf.tf_accpt) ? "hidden" : ""}
                     >
                         Сохранить
                     </Button>

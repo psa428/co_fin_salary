@@ -1,5 +1,5 @@
 import {  TableRow } from "./components";
-import { Content } from "../../components";
+// import { Content } from "../../components";
 
 import { UserRow } from "./components";
 // import { server } from "../../bff/server";
@@ -45,7 +45,7 @@ const UsersContainer = ({ className }) => {
 
     return (
         <div className={className}>
-            <Content error={errorMessage}>
+            {/* <Content error={errorMessage}> */}
             <h2>Пользователи</h2>
             <div>
                 <TableRow>
@@ -69,7 +69,7 @@ const UsersContainer = ({ className }) => {
                 ))}  
 
             </div>    
-            </Content>
+            {/* </Content> */}
             
         </div>    
     );

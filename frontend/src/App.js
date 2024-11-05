@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 
  import { Header} from './components';
  import { useDispatch, useSelector } from 'react-redux';
- import { Post } from './pages/post/post';
+ 
  import { InfYear, MonthInf, MonthInfEdit, StaffInf, StaffInfEdit,  NssInfEdit } from './pages';
  import { Autorization, Registration, Users, NssInf } from './pages';
 import styled from 'styled-components';
@@ -34,7 +34,7 @@ const H2 = styled.h2`
 `;
 
 
-const Footer = () => <div>Футер</div>;
+;
 
 const StyleHeader = styled(Header)`
   height: 120px;
@@ -93,13 +93,13 @@ function App() {
               <Route path='/month_nss/:id' element={<NssInfEdit />} />
               <Route path='/month_nss/:id/:kdate_lpu/:kdlpu/:year_f' element={<NssInfEdit />} />
 
-            <Route path='/post/:id' element={<Post />} />
+            
             <Route path='*' element={<div>Ошибка</div>} />
 
 
           </Routes>
       </Page>
-      <Footer />
+      
     
     </AppColumn>
   );
